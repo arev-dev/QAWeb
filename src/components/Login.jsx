@@ -1,28 +1,38 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/Users/login", {
-        username,
-        password,
-      });
-      // Guardar el token de autenticación o la sesión
-      console.log(response.data);
+      const response = await axios.post(
+        "http://localhost:5126/api/Users/login",
+        {
+          username,
+          password,
+        }
+      );
+
+      if (response.data.data) {
+        localStorage.setItem("authToken", response.data.data);
+        navigate("/");
+      } else {
+        setError(response.data.message);
+      }
     } catch (err) {
-      setError("Error al iniciar sesión");
+      setError(err.response.data.message ?? "Error al iniciar sesión");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h2 className="text-2xl font-bold text-center">Iniciar Sesión</h2>
+    <div className="max-w-md mx-auto p-4 " style={{ marginTop: "10rem" }}>
+      <h2 className="text-3xl font-bold text-center mb-4">Iniciar Sesión</h2>
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
           <label className="block text-sm">Nombre de Usuario</label>

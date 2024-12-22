@@ -17,15 +17,17 @@ const PostList = () => {
       {posts.map((post) => (
         <div
           key={post.id}
-          className="p-4  rounded shadow-sm w-full m-4 bg-slate-200"
+          className="p-4  rounded shadow-sm w-full m-4 cursor-pointer bg-slate-200 hover:bg-slate-300 transition-all duration-300 card-hover"
         >
           <h3 className="text-xl font-bold mb-2 text-slate-700">
             {post.title}
           </h3>
           <p className="mb-4 text-slate-600">{post.content}</p>
-          <button className="text-blue-500" onClick={() => {}}>
-            Ver más
-          </button>
+          <div className="flex justify-end">
+            <button className="text-blue-700" onClick={() => {}}>
+              Ver publicación
+            </button>
+          </div>
         </div>
       ))}
     </div>

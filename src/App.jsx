@@ -4,8 +4,10 @@ import PostDetails from "./components/PostDetails";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { Link } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 function App() {
+  const isAuthenticated = localStorage.getItem("authToken");
   return (
     <Router>
       <nav
@@ -28,8 +30,14 @@ function App() {
         </div>
       </nav>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/post/:id" element={<PostDetails />} />
+        <Route
+          path="/"
+          element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/post/:id"
+          element={isAuthenticated ? <PostDetails /> : <Navigate to="/login" />}
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
