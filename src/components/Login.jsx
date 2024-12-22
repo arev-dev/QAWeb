@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -7,6 +7,14 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const isAuthenticated = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,7 +29,7 @@ function Login() {
 
       if (response.data.data) {
         localStorage.setItem("authToken", response.data.data);
-        navigate("/");
+        window.location.reload();
       } else {
         setError(response.data.message);
       }

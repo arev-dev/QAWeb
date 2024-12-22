@@ -10,37 +10,56 @@ function App() {
   const isAuthenticated = localStorage.getItem("authToken");
   return (
     <Router>
-      <nav
-        className="p-4 fixed top-0 w-full z-10"
-        style={{ backgroundColor: "#213555" }}
-      >
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="text-white text-2xl">QAnswers!</div>
-          <div className="space-x-4">
-            <Link to="/" className="text-white hover:text-gray-300">
-              Inicio
-            </Link>
-            <Link to="/login" className="text-white hover:text-gray-300">
-              Iniciar Sesión
-            </Link>
-            <Link to="/register" className="text-white hover:text-gray-300">
-              Registrarse
-            </Link>
+      <div>
+        <nav
+          className="p-4 fixed top-0 w-full z-10"
+          style={{ backgroundColor: "#213555" }}
+        >
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="text-white text-2xl">QAnswers!</div>
+            <div className="space-x-4">
+              <Link to="/" className="text-white hover:text-gray-300">
+                Inicio
+              </Link>
+              {isAuthenticated && (
+                <Link
+                  onClick={() => {
+                    localStorage.removeItem("authToken");
+                    window.location.reload();
+                  }}
+                  className="text-red-300 hover:text-red-400"
+                >
+                  Cerrar Sesión
+                </Link>
+              )}
+              {!isAuthenticated && (
+                <Link to="/login" className="text-white hover:text-gray-300">
+                  Iniciar Sesión
+                </Link>
+              )}
+              {!isAuthenticated && (
+                <Link to="/register" className="text-white hover:text-gray-300">
+                  Registrarse
+                </Link>
+              )}
+            </div>
           </div>
-        </div>
-      </nav>
-      <Routes>
-        <Route
-          path="/"
-          element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/post/:id"
-          element={isAuthenticated ? <PostDetails /> : <Navigate to="/login" />}
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
+        </nav>
+        <Routes>
+          <Route
+            path="/"
+            element={isAuthenticated ? <Home /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/post/:id"
+            element={
+              isAuthenticated ? <PostDetails /> : <Navigate to="/login" />
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </div>
     </Router>
   );
 }
