@@ -16,7 +16,7 @@ function App() {
           style={{ backgroundColor: "#213555" }}
         >
           <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <div className="text-white text-2xl">QAnswers!</div>
+            <div className="text-white text-2xl font-bold">QAnswers!</div>
             <div className="space-x-4">
               <Link to="/" className="text-white hover:text-gray-300">
                 Inicio

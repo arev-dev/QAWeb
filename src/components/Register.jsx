@@ -16,8 +16,8 @@ function Register() {
         password,
       });
       if (response.data.data) {
-        localStorage.setItem("authToken", response.data.data);
-        navigate("/");
+        // localStorage.setItem("authToken", response.data.data);
+        navigate("/login");
       } else {
         setError(response.data.message);
       }
