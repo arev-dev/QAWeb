@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { formatTimeAgo } from "../utils/formatTime.js";
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
@@ -39,6 +40,9 @@ const PostList = () => {
               key={post.id}
               className="p-4 rounded shadow-sm cursor-pointer bg-slate-200 hover:bg-slate-300 transition-all duration-300 card-hover"
             >
+              <p className="text-sm text-gray-500 me-2">
+                {formatTimeAgo(post.createdAt)}
+              </p>
               <h3 className="text-xl font-bold mb-2 text-slate-700">
                 {post.title}
               </h3>
@@ -64,6 +68,9 @@ const PostList = () => {
               key={post.id}
               className="p-4 rounded shadow-sm cursor-pointer bg-slate-200 hover:bg-slate-300 transition-all duration-300 card-hover"
             >
+              <p className="text-sm text-gray-500 me-2">
+                {formatTimeAgo(post.createdAt)}
+              </p>
               <h3 className="text-xl font-bold mb-2 text-slate-700">
                 {post.title}
               </h3>
