@@ -32,9 +32,7 @@ function Home() {
 
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          {/* Modal Container */}
           <div className="relative bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-            {/* Botón de Cerrar */}
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-3xl"
               onClick={closeModal}
@@ -42,7 +40,6 @@ function Home() {
               &times;
             </button>
 
-            {/* Componente CreatePostInput */}
             <CreatePostInput />
           </div>
         </div>

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [userPosts, setUserPosts] = useState([]);
   const token = localStorage.getItem("authToken");
+  const navigate = useNavigate();
+
   let userId;
   if (token) {
     const decodedToken = jwtDecode(token);
@@ -32,8 +35,9 @@ const PostList = () => {
         {userPosts.length > 0 ? (
           userPosts.map((post) => (
             <div
+              onClick={() => navigate("/post/" + post.id)}
               key={post.id}
-              className="p-4 rounded shadow-sm cursor-pointer bg-slate-200 hover:bg-slate-300 transition-all duration-300"
+              className="p-4 rounded shadow-sm cursor-pointer bg-slate-200 hover:bg-slate-300 transition-all duration-300 card-hover"
             >
               <h3 className="text-xl font-bold mb-2 text-slate-700">
                 {post.title}
@@ -56,8 +60,9 @@ const PostList = () => {
         {posts.length > 0 ? (
           posts.map((post) => (
             <div
+              onClick={() => navigate("/post/" + post.id)}
               key={post.id}
-              className="p-4 rounded shadow-sm cursor-pointer bg-slate-200 hover:bg-slate-300 transition-all duration-300"
+              className="p-4 rounded shadow-sm cursor-pointer bg-slate-200 hover:bg-slate-300 transition-all duration-300 card-hover"
             >
               <h3 className="text-xl font-bold mb-2 text-slate-700">
                 {post.title}
