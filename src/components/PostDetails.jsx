@@ -90,6 +90,14 @@ function PostDetails() {
       setError("Ocurrió un error al eliminar la publicación");
     }
   };
+  const handleClose = async () => {
+    try {
+      await axios.post(`http://localhost:5126/api/Post/close/${id}`);
+      window.location.reload();
+    } catch (error) {
+      setError("Ocurrió un error al cerrar la publicación");
+    }
+  };
 
   const handleCommentDelete = async (commentId) => {
     try {
@@ -146,24 +154,28 @@ function PostDetails() {
 
           {post.userId == userId && (
             <div className="flex gap-4">
-              <button
-                onClick={handleEdit}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-              >
-                Editar
-              </button>
+              {!post.isClosed && (
+                <button
+                  onClick={handleEdit}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                  Editar
+                </button>
+              )}
               <button
                 onClick={handleDelete}
                 className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
               >
                 Eliminar
               </button>
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
-              >
-                Cerrar Pregunta
-              </button>
+              {!post.isClosed && (
+                <button
+                  onClick={handleClose}
+                  className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+                >
+                  Cerrar Pregunta
+                </button>
+              )}
             </div>
           )}
 
@@ -171,7 +183,12 @@ function PostDetails() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Comentarios
             </h2>
-            <CommentForm post={post} />
+            {!post.isClosed && <CommentForm post={post} />}
+            {post.isClosed && (
+              <p className="text-white bg-red-400 p-2 rounded italic mb-4">
+                Esta pregunta ha sido cerrada. No puedes comentar
+              </p>
+            )}
             {comments.length > 0 ? (
               comments.map((comment) => (
                 <div
