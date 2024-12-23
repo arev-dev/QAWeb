@@ -75,8 +75,6 @@ yarn build
 ## 📝 Scripts disponibles
 
 - `npm run dev`: Inicia el servidor de desarrollo
-- `npm run build`: Construye la aplicación para producción
-- `npm run preview`: Previsualiza la construcción de producción localmente
 
 ## 🛠️ Tecnologías utilizadas
 
