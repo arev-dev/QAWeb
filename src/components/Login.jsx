@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -69,6 +70,12 @@ function Login() {
         >
           Iniciar sesión
         </button>
+        <p className="mt-4 text-center">
+          ¿Aún no tienes una cuenta?{" "}
+          <Link to="/register" className="text-blue-500 hover:underline">
+            Regístrate aquí
+          </Link>
+        </p>
       </form>
     </div>
   );
