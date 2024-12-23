@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import UpdatePostInput from "./UpdatePostInput.jsx";
+import CommentForm from "./CommentForm.jsx";
 
 function PostDetails() {
   const { id } = useParams();
@@ -10,7 +11,7 @@ function PostDetails() {
   const [comments, setComments] = useState([]);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("authToken");
-  const username = jwtDecode(token).unique_name;
+  const username = jwtDecode(token).unique_name; // Username desde el JWT
   const userId = jwtDecode(token).nameid;
   const [userPostData, setUserPostData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -39,7 +40,7 @@ function PostDetails() {
         const commentsResponse = await axios.get(
           `http://localhost:5126/api/Post/comments/${id}`
         );
-        setComments(commentsResponse.data);
+        setComments(commentsResponse.data.data);
       } catch (error) {
         if (error.response && error.response.status === 404) {
           setComments([]);
@@ -90,6 +91,17 @@ function PostDetails() {
     }
   };
 
+  const handleCommentDelete = async (commentId) => {
+    try {
+      await axios.delete(
+        `http://localhost:5126/api/Post/comments/${commentId}`
+      );
+      setComments(comments.filter((comment) => comment.id !== commentId)); // Elimina el comentario localmente
+    } catch (error) {
+      setError("Ocurrió un error al eliminar el comentario");
+    }
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -107,7 +119,7 @@ function PostDetails() {
 
   return (
     <div
-      className="max-w-4xl mx-auto p-6 mt-12 bg-white rounded-lg shadow-lg"
+      className="max-w-4xl mx-auto p-6 mt-12 mb-12 bg-white rounded-lg shadow-lg"
       style={{ marginTop: "7rem" }}
     >
       {post ? (
@@ -155,13 +167,34 @@ function PostDetails() {
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Comentarios
             </h2>
+            <CommentForm post={post} />
             {comments.length > 0 ? (
               comments.map((comment) => (
                 <div
                   key={comment.id}
-                  className="mb-4 p-4 bg-gray-100 rounded-lg shadow-sm"
+                  className="mb-4 p-5 bg-gray-200 rounded-lg shadow-sm"
                 >
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-gray-800 font-semibold">
+                      @{comment.username}
+                    </p>
+                    <p className="text-sm text-gray-500 mb-4 me-2">
+                      {formatTimeAgo(comment.createdAt)}
+                    </p>
+                  </div>
                   <p className="text-gray-700">{comment.content}</p>
+
+                  {/* Botón de eliminar si el comentario es del usuario */}
+                  {comment.userId == userId && (
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() => handleCommentDelete(comment.id)}
+                        className="mt-1 px-4 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                      >
+                        Eliminar Comentario
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))
             ) : (
