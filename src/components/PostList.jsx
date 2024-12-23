@@ -66,7 +66,9 @@ const PostList = () => {
             <div
               onClick={() => navigate("/post/" + post.id)}
               key={post.id}
-              className="p-4 rounded shadow-sm cursor-pointer bg-slate-200 hover:bg-slate-300 transition-all duration-300 card-hover"
+              className={`p-4 rounded shadow-sm cursor-pointer hover:bg-slate-300 transition-all duration-300 card-hover ${
+                !post.isClosed ? "bg-slate-200" : "bg-red-200"
+              }`}
             >
               <p className="text-sm text-gray-500 me-2">
                 {formatTimeAgo(post.createdAt)}
@@ -76,7 +78,13 @@ const PostList = () => {
               </h3>
               <p className="mb-4 text-slate-600">{post.content}</p>
               <div className="flex justify-end">
-                <button className="text-blue-700">Ver publicación</button>
+                {!post.isClosed ? (
+                  <button className="text-blue-700">Ver publicación</button>
+                ) : (
+                  <button className="text-red-700 font-semibold">
+                    Cerrada
+                  </button>
+                )}
               </div>
             </div>
           ))
