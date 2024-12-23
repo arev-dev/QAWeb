@@ -11,7 +11,7 @@ function PostDetails() {
   const [comments, setComments] = useState([]);
   const [error, setError] = useState(null);
   const token = localStorage.getItem("authToken");
-  const username = jwtDecode(token).unique_name; // Username desde el JWT
+  const username = jwtDecode(token).unique_name;
   const userId = jwtDecode(token).nameid;
   const [userPostData, setUserPostData] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,10 +93,8 @@ function PostDetails() {
 
   const handleCommentDelete = async (commentId) => {
     try {
-      await axios.delete(
-        `http://localhost:5126/api/Post/comments/${commentId}`
-      );
-      setComments(comments.filter((comment) => comment.id !== commentId)); // Elimina el comentario localmente
+      await axios.delete(`http://localhost:5126/api/Comment/${commentId}`);
+      window.location.reload();
     } catch (error) {
       setError("Ocurrió un error al eliminar el comentario");
     }
@@ -160,6 +158,12 @@ function PostDetails() {
               >
                 Eliminar
               </button>
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+              >
+                Cerrar Pregunta
+              </button>
             </div>
           )}
 
@@ -184,11 +188,10 @@ function PostDetails() {
                   </div>
                   <p className="text-gray-700">{comment.content}</p>
 
-                  {/* Botón de eliminar si el comentario es del usuario */}
                   {comment.userId == userId && (
                     <div className="flex justify-end">
                       <button
-                        onClick={() => handleCommentDelete(comment.id)}
+                        onClick={() => handleCommentDelete(comment.commentId)}
                         className="mt-1 px-4 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600"
                       >
                         Eliminar Comentario
@@ -201,8 +204,6 @@ function PostDetails() {
               <p className="text-gray-500">No hay comentarios aún</p>
             )}
           </div>
-
-          {/* Modal de edición */}
           {isModalOpen && post && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
               <div className="relative bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
